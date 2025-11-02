@@ -1,0 +1,798 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy Systems Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #0a1f1f;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0a1f1f, #0d3d3d, #115e5e);
+            z-index: -2;
+        }
+
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(20, 184, 166, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: rgba(10, 31, 31, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 0;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 2px solid rgba(20, 184, 166, 0.3);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+            padding: 40px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+            top: -50%;
+            left: -50%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .sidebar-header h1 {
+            color: white;
+            font-size: 26px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 30px 0;
+        }
+
+        .nav-menu li {
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 4px solid transparent;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, rgba(20, 184, 166, 0.2), transparent);
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+
+        .nav-menu a:hover::before {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: #5eead4;
+            padding-left: 35px;
+            border-left-color: #5eead4;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(90deg, rgba(20, 184, 166, 0.3), rgba(13, 148, 136, 0.3));
+            border-left-color: #5eead4;
+            color: #5eead4;
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-menu a:hover .nav-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Content Area */
+        .content {
+            margin-left: 320px;
+            padding: 50px 70px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .activity-section {
+            display: none;
+            animation: slideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .activity-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Home Section */
+        .home-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .hero-title {
+            font-size: 58px;
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #2dd4bf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(20, 184, 166, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(13, 148, 136, 0.8)); }
+        }
+
+        .hero-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 20px;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+
+        .energy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .energy-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(20, 184, 166, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .energy-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.1) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease;
+        }
+
+        .energy-card:hover::before {
+            transform: scale(1);
+        }
+
+        .energy-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(20, 184, 166, 0.4);
+            border-color: #5eead4;
+        }
+
+        .card-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .energy-card h3 {
+            color: #5eead4;
+            font-size: 26px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .energy-card p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            position: relative;
+        }
+
+        /* Activity Header */
+        .activity-header {
+            font-size: 48px;
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #14b8a6, #0d9488, transparent) 1;
+            position: relative;
+        }
+
+        /* Diagram Container */
+        .diagram-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 25px;
+            border: 2px solid rgba(20, 184, 166, 0.3);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #14b8a6, #0d9488, #2dd4bf);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .diagram-container h3 {
+            color: #5eead4;
+            margin-bottom: 30px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+        }
+
+        .block-diagram {
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.1) 0%, rgba(13, 148, 136, 0.1) 100%);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .flow-block {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border-left: 5px solid;
+            border-image: linear-gradient(180deg, #14b8a6, #0d9488) 1;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .flow-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .flow-block:hover::before {
+            transform: translateX(0);
+        }
+
+        .flow-block:hover {
+            transform: translateX(10px);
+            box-shadow: 0 12px 40px rgba(20, 184, 166, 0.3);
+        }
+
+        .flow-block h4 {
+            color: #5eead4;
+            margin-bottom: 12px;
+            font-size: 20px;
+            text-shadow: 0 0 10px rgba(20, 184, 166, 0.3);
+        }
+
+        .flow-block p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.7;
+        }
+
+        .arrow {
+            text-align: center;
+            color: #2dd4bf;
+            font-size: 36px;
+            margin: 15px 0;
+            font-weight: bold;
+            animation: arrowBounce 2s infinite;
+            text-shadow: 0 0 20px rgba(45, 212, 191, 0.8);
+        }
+
+        @keyframes arrowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Explanation Section */
+        .explanation {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 25px;
+            border: 2px solid rgba(45, 212, 191, 0.3);
+            line-height: 1.9;
+            color: rgba(255,255,255,0.9);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .explanation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2dd4bf, #0d9488, #14b8a6);
+        }
+
+        .explanation h3 {
+            color: #2dd4bf;
+            margin-bottom: 25px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+        }
+
+        .explanation p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .explanation strong {
+            color: #5eead4;
+            font-weight: 600;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(10, 31, 31, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #14b8a6, #0d9488);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #0d9488, #2dd4bf);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .content {
+                margin-left: 0;
+                padding: 30px 20px;
+            }
+            .nav-menu {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 20px;
+            }
+            .nav-menu li {
+                flex: 1 1 45%;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a1f1f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 1s ease 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(20, 184, 166, 0.3);
+            border-top-color: #5eead4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h1>⚡ Renewable Energy</h1>
+            <p>Systems & Solutions Portfolio</p>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#home" class="nav-link active" onclick="showSection('home')">
+                <span class="nav-icon">🏠</span>Home
+            </a></li>
+            <li><a href="#activity1" class="nav-link" onclick="showSection('activity1')">
+                <span class="nav-icon">💨</span>Activity 1: Wind
+            </a></li>
+            <li><a href="#activity2" class="nav-link" onclick="showSection('activity2')">
+                <span class="nav-icon">🌾</span>Activity 2: Biomass
+            </a></li>
+            <li><a href="#activity3" class="nav-link" onclick="showSection('activity3')">
+                <span class="nav-icon">🌋</span>Activity 3: Geothermal
+            </a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <!-- Home Section -->
+        <section id="home" class="activity-section active">
+            <div class="home-section">
+                <h1 class="hero-title">Renewable Energy Systems</h1>
+                <p class="hero-subtitle">Exploring the future of sustainable power generation through Wind, Biomass, and Geothermal energy technologies. Each system represents a unique approach to harnessing nature's power for a cleaner tomorrow.</p>
+                
+                <div class="energy-grid">
+                    <div class="energy-card" onclick="navigateToActivity('activity1')">
+                        <div class="card-icon">🌬️</div>
+                        <h3>Wind Energy</h3>
+                        <p>Transforming the kinetic power of moving air into clean, renewable electricity through advanced turbine technology and aerodynamic engineering.</p>
+                    </div>
+                    <div class="energy-card" onclick="navigateToActivity('activity2')">
+                        <div class="card-icon">🌿</div>
+                        <h3>Biomass Energy</h3>
+                        <p>Converting organic waste materials and energy crops into sustainable power through innovative thermochemical and biological processes.</p>
+                    </div>
+                    <div class="energy-card" onclick="navigateToActivity('activity3')">
+                        <div class="card-icon">🔥</div>
+                        <h3>Geothermal Energy</h3>
+                        <p>Harnessing Earth's internal heat from deep underground reservoirs to generate reliable baseload renewable electricity.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 1: Wind Energy -->
+        <section id="activity1" class="activity-section">
+            <h2 class="activity-header">🌬️ Wind Energy System</h2>
+            
+            <div class="diagram-container">
+                <h3>System Architecture & Block Diagram</h3>
+                <div class="block-diagram">
+                    <div class="flow-block">
+                        <h4>1. Energy Source: Wind (Kinetic Energy)</h4>
+                        <p>Moving air masses containing kinetic energy due to differential heating of Earth's surface by solar radiation</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>2. Wind Turbine Rotor</h4>
+                        <p>Aerodynamic blades capture wind's kinetic energy and convert it to rotational mechanical energy</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>3. Gearbox</h4>
+                        <p>Increases rotational speed from low-speed rotor shaft to high-speed generator shaft</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>4. Generator</h4>
+                        <p>Converts mechanical rotational energy into electrical energy through electromagnetic induction</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>5. Power Converter & Transformer</h4>
+                        <p>Conditions and steps up voltage for efficient transmission to the grid</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>6. Output: Electrical Power to Grid</h4>
+                        <p>Clean electricity distributed to homes, industries, and commercial establishments</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation">
+                <h3>Detailed Explanation</h3>
+                <p><strong>Source of Energy:</strong> Wind energy originates from solar radiation heating Earth's surface unevenly, creating pressure differences that drive air movement. This kinetic energy in moving air masses serves as the primary energy source for wind power systems.</p>
+                
+                <p><strong>Conversion Process:</strong> The conversion begins when wind strikes the turbine blades, creating aerodynamic lift forces that rotate the rotor. This rotational mechanical energy passes through a gearbox that amplifies the rotational speed to match generator requirements. The generator then employs electromagnetic induction principles to transform mechanical rotation into alternating current electricity. Power electronics and transformers condition this electrical output to match grid specifications.</p>
+                
+                <p><strong>Output & Utilization:</strong> The system produces three-phase AC electrical power ranging from kilowatts for small turbines to several megawatts for large offshore installations. This electricity feeds directly into the power grid for distribution.</p>
+                
+                <p><strong>Real-World Application:</strong> Wind farms in India, particularly in Tamil Nadu, Gujarat, and Karnataka, contribute significantly to the national renewable energy portfolio. Offshore wind projects are gaining traction globally, providing consistent power generation due to stable marine wind patterns, supporting grid stability and reducing carbon emissions.</p>
+            </div>
+        </section>
+
+        <!-- Activity 2: Biomass Energy -->
+        <section id="activity2" class="activity-section">
+            <h2 class="activity-header">🌾 Biomass Energy System</h2>
+            
+            <div class="diagram-container">
+                <h3>System Architecture & Block Diagram</h3>
+                <div class="block-diagram">
+                    <div class="flow-block">
+                        <h4>1. Energy Source: Biomass (Organic Matter)</h4>
+                        <p>Agricultural residues, wood waste, energy crops, animal waste storing solar energy through photosynthesis</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>2. Collection & Pre-treatment</h4>
+                        <p>Biomass collection, sorting, drying, and size reduction to optimize conversion efficiency</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>3. Conversion Process (Multiple Pathways)</h4>
+                        <p><strong>Thermochemical:</strong> Combustion, gasification, pyrolysis<br>
+                        <strong>Biochemical:</strong> Anaerobic digestion, fermentation</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>4. Energy Carrier Production</h4>
+                        <p>Heat, biogas (methane), syngas, bio-oil, or ethanol depending on conversion method</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>5. Power Generation Unit</h4>
+                        <p>Steam turbine, gas engine, or fuel cell converts thermal/chemical energy to mechanical/electrical energy</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>6. Output: Electricity, Heat, or Biofuels</h4>
+                        <p>Multiple energy products for diverse applications with byproducts like bio-fertilizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation">
+                <h3>Detailed Explanation</h3>
+                <p><strong>Source of Energy:</strong> Biomass represents stored solar energy captured through plant photosynthesis. Agricultural residues like rice husks, sugarcane bagasse, wood chips, animal manure, and dedicated energy crops contain chemical energy bonds that can be released through various conversion processes.</p>
+                
+                <p><strong>Conversion Process:</strong> Biomass conversion follows multiple pathways depending on feedstock characteristics. Thermochemical processes like direct combustion burn biomass to produce heat for steam generation, while gasification produces combustible syngas at high temperatures with controlled oxygen. Biochemical routes employ microorganisms: anaerobic digestion breaks down organic matter producing methane-rich biogas, while fermentation converts sugars into ethanol. Each pathway transforms biomass's chemical energy into usable forms.</p>
+                
+                <p><strong>Output & Utilization:</strong> Systems generate electricity through steam or gas turbines, thermal energy for industrial processes or district heating, and transportation biofuels like ethanol and biodiesel. Digestate and ash serve as nutrient-rich fertilizers.</p>
+                
+                <p><strong>Real-World Application:</strong> Sugar mills in Maharashtra utilize bagasse for cogeneration, simultaneously producing sugar and electricity. Biogas plants in rural Punjab convert cattle waste into cooking fuel and organic fertilizer, demonstrating biomass energy's waste-to-wealth potential while addressing energy access and agricultural waste management challenges sustainably.</p>
+            </div>
+        </section>
+
+        <!-- Activity 3: Geothermal Energy -->
+        <section id="activity3" class="activity-section">
+            <h2 class="activity-header">🌋 Geothermal Energy System</h2>
+            
+            <div class="diagram-container">
+                <h3>System Architecture & Block Diagram</h3>
+                <div class="block-diagram">
+                    <div class="flow-block">
+                        <h4>1. Energy Source: Earth's Internal Heat</h4>
+                        <p>Geothermal reservoirs containing hot water/steam from radioactive decay and primordial heat</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>2. Production Well System</h4>
+                        <p>Deep wells (1-3 km) drilled to access hot geothermal fluids from underground reservoirs</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>3. Separation & Heat Extraction</h4>
+                        <p>Steam separated from water; heat exchangers transfer thermal energy (for binary systems)</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>4. Steam Turbine</h4>
+                        <p>High-pressure steam drives turbine blades, converting thermal energy to mechanical rotation</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>5. Generator</h4>
+                        <p>Turbine shaft rotates generator producing electrical energy via electromagnetic induction</p>
+                    </div>
+                    <div class="arrow">↓</div>
+                    
+                    <div class="flow-block">
+                        <h4>6. Injection Well System</h4>
+                        <p>Condensed water reinjected into reservoir for sustainability; electricity distributed to grid</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation">
+                <h3>Detailed Explanation</h3>
+                <p><strong>Source of Energy:</strong> Geothermal energy derives from Earth's molten core, maintained by radioactive element decay and residual planetary formation heat. This thermal energy heats underground rock formations and aquifers, creating geothermal reservoirs with temperatures reaching 150-350°C at accessible depths in tectonically active regions.</p>
+                
+                <p><strong>Conversion Process:</strong> Three main technologies exist: Dry steam plants directly use steam from reservoirs to drive turbines. Flash steam systems depressurize hot water, producing steam through rapid vaporization. Binary cycle plants transfer heat from moderate-temperature fluids to a secondary working fluid with lower boiling point, which then vaporizes to drive turbines. All systems convert geothermal thermal energy through steam turbines into mechanical rotation, subsequently transformed into electricity by generators.</p>
+                
+                <p><strong>Output & Utilization:</strong> Geothermal plants provide baseload electricity with capacity factors exceeding 90%, producing 5-100 MW per plant. Direct-use applications include district heating, greenhouse agriculture, and industrial processes utilizing the thermal energy without conversion.</p>
+                
+                <p><strong>Real-World Application:</strong> Iceland generates 25% of its electricity from geothermal sources, with Reykjavik's district heating serving 95% of buildings. In India, Puga Valley in Ladakh shows geothermal potential. The Philippines' Malitbog power plant demonstrates reliable baseload power generation in volcanic regions, providing consistent renewable energy unaffected by weather variations.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 5 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = Math.random() * 10 + 10 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.activity-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update active nav link
+            const links = document.querySelectorAll('.nav-link');
+            links.forEach(link => link.classList.remove('active'));
+            
+            // Find and activate the correct nav link
+            const targetLink = document.querySelector(`a[href="#${sectionId}"]`);
+            if (targetLink) {
+                targetLink.classList.add('active');
+            }
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function navigateToActivity(activityId) {
+            showSection(activityId);
+        }
+
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
+    </script>
